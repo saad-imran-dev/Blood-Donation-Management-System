@@ -1,0 +1,51 @@
+﻿@model Donor
+@{
+    ViewData["Title"] = "Index";
+    TempData["Id"] = Model.Id;
+    Layout = "~/Views/Shared/_DonorLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col">
+        <h1 class="text-secondary">Welcome @Model.FirstName</h1>
+    </div>
+    <div class="col text-end my-auto">
+        <a class="btn btn-secondary" asp-controller="Donor" asp-action="EditInfo" asp-route-id="@Model.Id">Edit</a>
+    </div>
+</div>
+
+
+<hr />
+
+<form>
+    <div>
+        <div>Email</div>
+        <div class="form-control mb-3">@Model.Email</div>
+    </div>
+
+    <div>
+        <div>CNIC</div>
+        <div class="form-control mb-3">@Model.Cnic</div>
+    </div>
+
+    <div>
+        <div>Address</div>
+        <div class="form-control mb-3">@Model.Address</div>
+    </div>
+
+    <div>
+        <div>Area Name</div>
+        <div class="form-control mb-3">@Model.Area.Name</div>
+    </div>
+
+    <div>
+        <div>City</div>
+        <div class="form-control mb-3">@Model.Area.City</div>
+    </div>
+
+    <div>
+        <div>Province</div>
+        <div class="form-control mb-3">@Model.Area.Province</div>
+    </div>
+</form>
+
