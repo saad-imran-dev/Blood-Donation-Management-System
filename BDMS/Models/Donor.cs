@@ -6,8 +6,7 @@ namespace BDMS.Models
     public class Donor
     {
         public int Id { get; set; }
-        [Required]
-        public string Cnic { get; set; }
+        public int Cnic { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]

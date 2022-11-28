@@ -6,7 +6,6 @@ namespace BDMS.Models
     public class Slot
     {
         public int Id { get; set; }
-        public int SlotNo { get; set; }
         [Required]
         public DateTime Time { get; set; }
         [Required]

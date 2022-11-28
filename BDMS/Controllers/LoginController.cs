@@ -25,7 +25,7 @@ namespace BDMS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DonorLogin(Donor obj)
         {
-            var FromDb = _db.Donors.Where(s => s.Email == obj.Email).First();
+            var FromDb = _db.Donors.Where(s => s.Email == obj.Email).FirstOrDefault();
 
             if (FromDb == null)
             {
