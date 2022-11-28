@@ -1,0 +1,28 @@
+﻿@model IEnumerable<BloodCamp>
+@{
+    ViewData["Title"] = "Index";
+    TempData["Id"] = TempData["Id"];
+    Layout = "~/Views/Shared/_DonorLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col">
+        <h1 class="text-secondary">Donate now and Save lives</h1>
+    </div>
+</div>
+
+
+<hr />
+
+@foreach(var obj in Model){
+        <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">@obj.Organization.Name</h5>
+        <p class="card-text">
+            City: @obj.Area.Name
+            Province: @obj.Area.Province
+        </p>
+      </div>
+    </div>
+}
+

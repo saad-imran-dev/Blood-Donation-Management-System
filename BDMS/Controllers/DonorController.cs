@@ -1,6 +1,7 @@
 ﻿using BDMS.Data;
 using BDMS.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BDMS.Controllers
 {
@@ -84,7 +85,7 @@ namespace BDMS.Controllers
         {
             TempData["Id"] = TempData["Id"];
 
-            IEnumerable<BloodCamp> camps = _db.BloodCamps;
+            IEnumerable<BloodCamp> camps = _db.BloodCamps.Include(b => b.Area).Include(b => b.Organization);
 
             foreach(BloodCamp c in camps)
             {

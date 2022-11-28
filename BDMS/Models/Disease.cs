@@ -4,7 +4,6 @@ namespace BDMS.Models
 {
     public class Disease
     {
-
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }

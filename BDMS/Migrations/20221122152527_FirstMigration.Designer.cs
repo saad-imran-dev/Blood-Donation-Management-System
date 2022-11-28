@@ -4,6 +4,7 @@ using BDMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BDMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221122152527_FirstMigration")]
+    partial class FirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,19 +27,11 @@ namespace BDMS.Migrations
 
             modelBuilder.Entity("BDMS.Models.Area", b =>
                 {
-<<<<<<< HEAD
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-=======
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Code"));
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -50,30 +45,18 @@ namespace BDMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-                    b.HasKey("Id");
-=======
                     b.HasKey("Code");
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.ToTable("Areas");
                 });
 
             modelBuilder.Entity("BDMS.Models.BloodBag", b =>
                 {
-<<<<<<< HEAD
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-=======
                     b.Property<int>("BagId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BagId"));
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.Property<string>("BloodGrp")
                         .IsRequired()
@@ -82,11 +65,7 @@ namespace BDMS.Migrations
                     b.Property<int>("History")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
-                    b.HasKey("Id");
-=======
                     b.HasKey("BagId");
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.HasIndex("History");
 
@@ -95,67 +74,35 @@ namespace BDMS.Migrations
 
             modelBuilder.Entity("BDMS.Models.BloodCamp", b =>
                 {
-<<<<<<< HEAD
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-=======
                     b.Property<int>("OrgCode")
                         .HasColumnType("int");
 
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
                     b.Property<int>("AreaCode")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-<<<<<<< HEAD
-                    b.Property<int>("OrgCode")
-                        .HasColumnType("int");
-
-=======
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("beds")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
-                    b.HasKey("Id");
-
-                    b.HasIndex("AreaCode");
-
-                    b.HasIndex("OrgCode");
-
-=======
                     b.HasKey("OrgCode", "AreaCode");
 
                     b.HasIndex("AreaCode");
 
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
                     b.ToTable("BloodCamps");
                 });
 
             modelBuilder.Entity("BDMS.Models.Disease", b =>
                 {
-<<<<<<< HEAD
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-=======
                     b.Property<int>("DiseaseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DiseaseId"));
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -169,30 +116,18 @@ namespace BDMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-                    b.HasKey("Id");
-=======
                     b.HasKey("DiseaseId");
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.ToTable("Diseases");
                 });
 
             modelBuilder.Entity("BDMS.Models.Donor", b =>
                 {
-<<<<<<< HEAD
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-=======
                     b.Property<int>("Cnic")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Cnic"));
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -201,13 +136,6 @@ namespace BDMS.Migrations
                     b.Property<int>("AreaCode")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
-                    b.Property<string>("Cnic")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-=======
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -224,26 +152,13 @@ namespace BDMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-                    b.HasKey("Id");
-=======
                     b.HasKey("Cnic");
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.HasIndex("AreaCode");
 
                     b.ToTable("Donors");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("BDMS.Models.Employee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-=======
             modelBuilder.Entity("BDMS.Models.Emplopyee", b =>
                 {
                     b.Property<int>("Cnic")
@@ -251,17 +166,10 @@ namespace BDMS.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Cnic"));
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.Property<int>("AreaCode")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
-                    b.Property<int>("Cnic")
-                        .HasColumnType("int");
-
-=======
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -281,52 +189,32 @@ namespace BDMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-                    b.HasKey("Id");
-=======
                     b.HasKey("Cnic");
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.HasIndex("AreaCode");
 
                     b.HasIndex("OrgCode");
 
-<<<<<<< HEAD
-                    b.ToTable("Employees");
-=======
                     b.ToTable("Emplopyees");
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
                 });
 
             modelBuilder.Entity("BDMS.Models.Organization", b =>
                 {
-<<<<<<< HEAD
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-=======
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Code"));
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-                    b.Property<string>("Desc")
-=======
                     b.Property<int>("AreaCode")
                         .HasColumnType("int");
 
                     b.Property<string>("Desc")
                         .IsRequired()
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -337,32 +225,20 @@ namespace BDMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-                    b.HasKey("Id");
-=======
                     b.HasKey("Code");
 
                     b.HasIndex("AreaCode");
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.ToTable("Organizations");
                 });
 
             modelBuilder.Entity("BDMS.Models.Slot", b =>
                 {
-<<<<<<< HEAD
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-=======
                     b.Property<int>("SlotNo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SlotNo"));
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.Property<int>("AreaCode")
                         .HasColumnType("int");
@@ -386,11 +262,7 @@ namespace BDMS.Migrations
                     b.Property<int>("bedno")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
-                    b.HasKey("Id");
-=======
                     b.HasKey("SlotNo");
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.HasIndex("AreaCode");
 
@@ -409,12 +281,6 @@ namespace BDMS.Migrations
                     b.Property<int>("DiseaseId")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-=======
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
                     b.HasKey("BagId", "DiseaseId");
 
                     b.HasIndex("DiseaseId");
@@ -463,27 +329,16 @@ namespace BDMS.Migrations
                     b.Navigation("Area");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("BDMS.Models.Employee", b =>
-                {
-                    b.HasOne("BDMS.Models.Area", "Area")
-                        .WithMany("Employees")
-=======
             modelBuilder.Entity("BDMS.Models.Emplopyee", b =>
                 {
                     b.HasOne("BDMS.Models.Area", "Area")
                         .WithMany("Emplopyees")
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
                         .HasForeignKey("AreaCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BDMS.Models.Organization", "Organization")
-<<<<<<< HEAD
-                        .WithMany("Employees")
-=======
                         .WithMany("Emplopyees")
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
                         .HasForeignKey("OrgCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -493,8 +348,6 @@ namespace BDMS.Migrations
                     b.Navigation("Organization");
                 });
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("BDMS.Models.Organization", b =>
                 {
                     b.HasOne("BDMS.Models.Area", "Area")
@@ -506,7 +359,6 @@ namespace BDMS.Migrations
                     b.Navigation("Area");
                 });
 
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
             modelBuilder.Entity("BDMS.Models.Slot", b =>
                 {
                     b.HasOne("BDMS.Models.Area", "Area")
@@ -559,13 +411,9 @@ namespace BDMS.Migrations
 
                     b.Navigation("Donors");
 
-<<<<<<< HEAD
-                    b.Navigation("Employees");
-=======
                     b.Navigation("Emplopyees");
 
                     b.Navigation("Organizations");
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.Navigation("Slots");
                 });
@@ -589,11 +437,7 @@ namespace BDMS.Migrations
                 {
                     b.Navigation("BloodCamps");
 
-<<<<<<< HEAD
-                    b.Navigation("Employees");
-=======
                     b.Navigation("Emplopyees");
->>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
 
                     b.Navigation("Slots");
                 });
