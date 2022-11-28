@@ -9,7 +9,7 @@ namespace BDMS.Models
         public int Id { get; set; }
 
         [ForeignKey("Organization")]
-        public int OrgCode { get; set; }
+        public int OrgCode{ get; set; }
         public Organization Organization { get; set; }
 
         [ForeignKey("Area")]
