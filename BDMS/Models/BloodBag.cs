@@ -6,7 +6,12 @@ namespace BDMS.Models
     public class BloodBag
     {
 
+<<<<<<< HEAD
         public int Id { get; set; }
+=======
+        [Key]
+        public int BagId { get; set; }
+>>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
         [Required]
         public string BloodGrp { get; set; }
 
