@@ -16,7 +16,15 @@ namespace BDMS.Data
         public DbSet<BloodCamp> BloodCamps { get; set; }
         public DbSet<Disease> Diseases { get; set; }
         public DbSet<Donor> Donors { get; set; }
+<<<<<<< HEAD
         public DbSet<Employee> Employees { get; set; }
+=======
+<<<<<<< HEAD
+        public DbSet<Employee> Employees { get; set; }
+=======
+        public DbSet<Emplopyee> Emplopyees { get; set; }
+>>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
+>>>>>>> 9c63931c7a6d2538d2659df7840d608711421381
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Slot> Slots { get; set; }
         public DbSet<TestedBags> TestedBags { get; set; }

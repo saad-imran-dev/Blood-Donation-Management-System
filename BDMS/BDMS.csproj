@@ -6,6 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
+<<<<<<< HEAD
 	<ItemGroup>
 		<PackageReference Include="DateOnlyTimeOnly.AspNet" Version="2.0.0" />
 		<PackageReference Include="DateOnlyTimeOnly.AspNet.Swashbuckle" Version="2.0.0" />
@@ -19,5 +20,27 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
 	</ItemGroup>
+=======
+  <ItemGroup>
+    <PackageReference Include="DateOnlyTimeOnly.AspNet" Version="2.0.0" />
+    <PackageReference Include="DateOnlyTimeOnly.AspNet.Swashbuckle" Version="2.0.0" />
+<<<<<<< HEAD
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.0" />
+=======
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
+>>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+<<<<<<< HEAD
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
+=======
+>>>>>>> 4efe9cc7413690b909237a22cacc57c20d2ff2a2
+  </ItemGroup>
+>>>>>>> 9c63931c7a6d2538d2659df7840d608711421381
 
 </Project>
