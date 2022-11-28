@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BDMS.Models
 {
-    [PrimaryKey(nameof(BagId), nameof(DiseaseId))]
     public class TestedBags
     {
         public int Id { get; set; }
