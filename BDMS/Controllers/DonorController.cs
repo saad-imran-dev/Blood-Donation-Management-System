@@ -146,7 +146,7 @@ namespace BDMS.Controllers
         public IActionResult DonateSlot(DateTime date, int Campid, int bed, DateTime time)
         {
             if(date==null || Campid==0 || bed==0 || time == null || !TempData.ContainsKey("Id"))
-        {
+            {
                 return NotFound();
             }
 
