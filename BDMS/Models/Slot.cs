@@ -19,7 +19,7 @@ namespace BDMS.Models
         public BloodCamp BloodCamp { get; set; }
 
         [ForeignKey("Donor")]
-        public int DonorCnic { get; set; }
+        public int DonorId { get; set; }
         public Donor Donor { get; set; }
 
         public ICollection<BloodBag> BloodBags { get; set; }
