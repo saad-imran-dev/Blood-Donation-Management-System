@@ -1,8 +1,56 @@
-﻿
+﻿@model List<Slot>
 @{
     ViewData["Title"] = "DonateSlot";
     Layout = "~/Views/Shared/_DonorLayout.cshtml";
 }
 
-<h1>DonateSlot</h1>
+<div class="row">
+    <div class="col">
+        <h1 class="text-secondary">Slots Available</h1>
+    </div>
+    <div class="col text-end my-auto">
+        <h3 class="text-secondary">@TempData["Date"]</h3>
+    </div>
+</div>
+
+<hr />
+
+<div class="text-center" style="width: 100px;">
+
+<table class="table table-bordered table-striped" style="width:50%">
+    <thead>
+        <tr>
+            <th style="width:70%" class="text-center">
+                Time
+            </th>
+            <th style="width:30%" class="text-center">
+                
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <form method="post" asp-controller="Donor" asp-action="DonateSlot">
+                    <input type="datetime" name="date" value="@obj.Date" style="display: none;">
+                    <input type="number" name="Campid" value="@obj.CampId" style="display: none;">
+                    <input type="number" name="bed" value="@obj.bedno" style="display: none;">
+                    <input type="datetime" name="time" value="@obj.Time" style="display: none;">                
+                <tr>
+                    <td style="width:70%" class="text-center my-auto">
+                        @obj.Time.TimeOfDay
+                    </td>
+                    <td style="width:30%" class="text-center my-auto">
+                        <button class="btn btn-primary" style="width: 150px;">
+                            Book
+                        </button>
+                    </td>
+                </tr>
+            </form>
+        }
+    </tbody>
+</table>
+
+</div>
 

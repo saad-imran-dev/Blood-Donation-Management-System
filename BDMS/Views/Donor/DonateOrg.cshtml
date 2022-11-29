@@ -15,7 +15,7 @@
 <hr />
 
 @foreach(var item in Model){
-        <a class="text-reset text-decoration-none" asp-controller="Donor" asp-action="DonateSlot">
+        <a class="text-reset text-decoration-none" asp-controller="Donor" asp-action="DonateSlot" asp-route-id="@item.Id">
           <div class="card mb-4" style="width: 100%;">
           <div class="card-body">
                 <h5 class="card-title text-decoration-underline">@Html.DisplayFor(modelItem => item.Organization.Name)</h5>

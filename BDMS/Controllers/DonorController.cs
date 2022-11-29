@@ -1,7 +1,9 @@
 ﻿using BDMS.Data;
 using BDMS.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace BDMS.Controllers
 {
@@ -99,9 +101,68 @@ namespace BDMS.Controllers
         }
 
         // GET
-        public IActionResult DonateSlot()
+        public IActionResult DonateSlot(int id)
         {
-            return View();
+            TempData["Id"] = TempData["Id"];
+
+            BloodCamp camp = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS].[dbo].[BloodCamps] WHERE Id={id}").FirstOrDefault();
+
+            if(camp == null)
+            {
+                return NotFound();
+            }
+
+            DateTime time = camp.StartTime;
+
+            IEnumerable<Slot> SlotBooked = _db.Slots.FromSql($"SELECT * FROM [BDMS].[dbo].[Slots] WHERE CAST( {DateTime.Today.Date} AS Date )=CAST( GETDATE() AS Date ) and CampId={id}");
+            List<Slot> SlotAvailable = new List<Slot>();
+
+            while (time.TimeOfDay != camp.EndTime.TimeOfDay)
+            {
+                var count = SlotBooked.Where(s => s.Time.TimeOfDay == time.TimeOfDay);
+
+                if (count.Count() < camp.beds)
+                {
+                    Slot obj = new Slot();
+                    obj.Date = DateTime.Today.Date;
+                    obj.CanDonate = "No";
+                    obj.CampId = id;
+                    obj.bedno = count.Count() + 1;
+                    obj.Time = Convert.ToDateTime(time.ToString());
+                    SlotAvailable.Add(obj);
+                }
+
+                time = time.AddMinutes(30);
+            }
+
+            TempData["Date"] = DateTime.Today.Date;
+
+            return View(SlotAvailable);
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DonateSlot(DateTime date, int Campid, int bed, DateTime time)
+        {
+            if(date==null || Campid==0 || bed==0 || time == null || !TempData.ContainsKey("Id"))
+        {
+                return NotFound();
+            }
+
+            Slot obj = new Slot();
+            obj.Date = date;
+            obj.CanDonate = "No";
+            obj.CampId = Campid;
+            obj.bedno = bed;
+            obj.Time = time;
+            obj.DonorId = Convert.ToInt32(TempData["Id"]);
+            TempData["Id"] = TempData["Id"];
+
+            _db.Slots.Add(obj);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }
