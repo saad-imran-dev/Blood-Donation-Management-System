@@ -85,13 +85,15 @@ namespace BDMS.Controllers
         {
             TempData["Id"] = TempData["Id"];
 
-            IEnumerable<BloodCamp> camps = _db.BloodCamps.Include(b => b.Area).Include(b => b.Organization);
+            //IEnumerable<BloodCamp> camps = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS].[dbo].[BloodCamps]");
+            //var camps = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS].[dbo].[BloodCamps] b JOIN [BDMS].[dbo].[Areas] a on b.AreaCode=a.Id JOIN [BDMS].[dbo].[Organizations] o on b.OrgCode=o.Id");
+            var camps = _db.BloodCamps.Include(b => b.Area).Include(b => b.Organization);
 
-            foreach(BloodCamp c in camps)
-            {
-                c.Area = _db.Areas.Find(c.AreaCode);
-                c.Organization = _db.Organizations.Find(c.OrgCode);
-            }
+            //foreach(BloodCamp c in camps)
+            //{
+            //    c.Area = _db.Areas.Find(c.AreaCode);
+            //    c.Organization = _db.Organizations.Find(c.OrgCode);
+            //}
 
             return View(camps);
         }

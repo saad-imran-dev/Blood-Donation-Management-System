@@ -7,20 +7,22 @@
 
 <div class="row">
     <div class="col">
-        <h1 class="text-secondary">Donate now and Save lives</h1>
+        <h1 class="text-secondary">Organizations</h1>
     </div>
 </div>
 
 
 <hr />
 
-@foreach(var obj in Model){
-        <div class="card" style="width: 18rem;">
+@foreach(var item in Model){
+        <div class="card mb-4" style="width: 100%;">
       <div class="card-body">
-        <h5 class="card-title">@obj.Organization.Name</h5>
+            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Organization.Name)</h5>
         <p class="card-text">
-            City: @obj.Area.Name
-            Province: @obj.Area.Province
+                Address: @Html.DisplayFor(modelItem => item.Organization.Address)<br>
+                Area: @Html.DisplayFor(modelItem => item.Area.Name)<br>
+                City: @Html.DisplayFor(modelItem => item.Area.City)<br>
+                Province: @Html.DisplayFor(modelItem => item.Area.Province)<br>
         </p>
       </div>
     </div>

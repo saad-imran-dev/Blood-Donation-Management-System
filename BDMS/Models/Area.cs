@@ -11,9 +11,9 @@ namespace BDMS.Models
         public string? City { get; set; }
         [Required]
         public string? Province { get; set; }
+
         public ICollection<BloodCamp> BloodCamps { get; set; }
         public ICollection<Employee> Employees { get; set; }
-        public ICollection<Organization> Organizations { get; set; }
         public ICollection<Donor> Donors { get; set; }
         public ICollection<Slot> Slots { get; set; }
 
