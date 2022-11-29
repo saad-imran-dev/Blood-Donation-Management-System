@@ -25,7 +25,7 @@ namespace BDMS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DonorLogin(Donor obj)
         {
-            var FromDb = _db.Donors.Where(s => s.Email == obj.Email).FirstOrDefault();
+            var FromDb = _db.Donors.FromSql($"SELECT * FROM [BDMS].[dbo].[Donors] WHERE Email={obj.Email}").FirstOrDefault();
 
             if (FromDb == null)
             {
@@ -56,7 +56,7 @@ namespace BDMS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DonorRegister(Donor obj)
         {
-            var FromDb = _db.Donors.Where(s => s.Email == obj.Email);
+            var FromDb = _db.Donors.FromSql($"SELECT * FROM [BDMS].[dbo].[Donors] WHERE Email={obj.Email}");
 
             if (obj == null)
             {
