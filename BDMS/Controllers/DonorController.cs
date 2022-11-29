@@ -81,7 +81,7 @@ namespace BDMS.Controllers
         }
 
         // GET
-        public IActionResult Donate()
+        public IActionResult DonateOrg()
         {
             TempData["Id"] = TempData["Id"];
 
@@ -96,6 +96,12 @@ namespace BDMS.Controllers
             //}
 
             return View(camps);
+        }
+
+        // GET
+        public IActionResult DonateSlot()
+        {
+            return View();
         }
     }
 }
