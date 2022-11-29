@@ -14,13 +14,9 @@ namespace BDMS.Models
         [Required]
         public String CanDonate { get; set; }
 
-        [ForeignKey("Organization")]
-        public int OrgCode { get; set; }
-        public Organization Organization { get; set; }
-
-        [ForeignKey("Area")]
-        public int AreaCode { get; set; }
-        public Area Area { get; set; }
+        [ForeignKey("BloodCamp")]
+        public int CampId { get; set; }
+        public BloodCamp BloodCamp { get; set; }
 
         [ForeignKey("Donor")]
         public int DonorCnic { get; set; }

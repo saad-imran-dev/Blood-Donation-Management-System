@@ -15,7 +15,6 @@ namespace BDMS.Models
         public ICollection<BloodCamp> BloodCamps { get; set; }
         public ICollection<Employee> Employees { get; set; }
         public ICollection<Donor> Donors { get; set; }
-        public ICollection<Slot> Slots { get; set; }
 
     }
 }

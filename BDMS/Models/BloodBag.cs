@@ -8,10 +8,6 @@ namespace BDMS.Models
 
         public int Id { get; set; }
 
-
-        [Key]
-        public int BagId { get; set; }
-
         [Required]
         public string BloodGrp { get; set; }
 
