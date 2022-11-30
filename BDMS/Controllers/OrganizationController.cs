@@ -30,7 +30,7 @@ namespace BDMS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(Organization obj)
         {
-            var orgfromdb = _db.Organizations.Where(s => s.Name == obj.Name).Include(b=> b.Employees).FirstOrDefault();
+            var orgfromdb = _db.Organizations.Where(s => s.Name == obj.Name).FirstOrDefault();
             if (obj != null)
             {
 
@@ -75,15 +75,6 @@ namespace BDMS.Controllers
                 ModelState.AddModelError("Name", "Name already exist");
                 return RedirectToAction("Organizationregister");
             }
-            obj.Area = _db.Areas.Where(s => s.Name == obj.Area.Name && s.City == obj.Area.City && s.Province == obj.Area.Province).FirstOrDefault();
-
-            if (obj.Area == null)
-            {
-                ModelState.AddModelError("Area.Name", "Area does not exist");
-                return RedirectToAction("Organizationregister");
-            }
-
-            obj.AreaCode = obj.Area.Id;
             _db.Organizations.Add(obj);
             _db.SaveChanges();
             return RedirectToAction("Login");

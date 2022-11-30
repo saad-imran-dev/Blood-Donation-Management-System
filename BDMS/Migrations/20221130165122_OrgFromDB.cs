@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -7,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BDMS.Migrations
 {
     /// <inheritdoc />
-    public partial class addOrganizationToBDMS : Migration
+    public partial class OrgFromDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,12 +42,28 @@ namespace BDMS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Organizations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Desc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organizations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Donors",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Cnic = table.Column<int>(type: "int", nullable: false),
+                    Cnic = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -61,29 +76,6 @@ namespace BDMS.Migrations
                     table.PrimaryKey("PK_Donors", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Donors_Areas_AreaCode",
-                        column: x => x.AreaCode,
-                        principalTable: "Areas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Organizations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Desc = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AreaCode = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Organizations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Organizations_Areas_AreaCode",
                         column: x => x.AreaCode,
                         principalTable: "Areas",
                         principalColumn: "Id",
@@ -116,8 +108,7 @@ namespace BDMS.Migrations
                         column: x => x.OrgCode,
                         principalTable: "Organizations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                        
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -126,7 +117,7 @@ namespace BDMS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Cnic = table.Column<int>(type: "int", nullable: false),
+                    Cnic = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -148,7 +139,7 @@ namespace BDMS.Migrations
                         column: x => x.OrgCode,
                         principalTable: "Organizations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -161,29 +152,22 @@ namespace BDMS.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     bedno = table.Column<int>(type: "int", nullable: false),
                     CanDonate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrgCode = table.Column<int>(type: "int", nullable: false),
-                    AreaCode = table.Column<int>(type: "int", nullable: false),
-                    DonorCnic = table.Column<int>(type: "int", nullable: false)
+                    CampId = table.Column<int>(type: "int", nullable: false),
+                    DonorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Slots", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Slots_Areas_AreaCode",
-                        column: x => x.AreaCode,
-                        principalTable: "Areas",
+                        name: "FK_Slots_BloodCamps_CampId",
+                        column: x => x.CampId,
+                        principalTable: "BloodCamps",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Slots_Donors_DonorCnic",
-                        column: x => x.DonorCnic,
+                        name: "FK_Slots_Donors_DonorId",
+                        column: x => x.DonorId,
                         principalTable: "Donors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Slots_Organizations_OrgCode",
-                        column: x => x.OrgCode,
-                        principalTable: "Organizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -192,15 +176,14 @@ namespace BDMS.Migrations
                 name: "BloodBags",
                 columns: table => new
                 {
-                    BagId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Id = table.Column<int>(type: "int", nullable: false),
                     BloodGrp = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     History = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BloodBags", x => x.BagId);
+                    table.PrimaryKey("PK_BloodBags", x => x.Id);
                     table.ForeignKey(
                         name: "FK_BloodBags_Slots_History",
                         column: x => x.History,
@@ -225,7 +208,7 @@ namespace BDMS.Migrations
                         name: "FK_TestedBags_BloodBags_BagId",
                         column: x => x.BagId,
                         principalTable: "BloodBags",
-                        principalColumn: "BagId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TestedBags_Diseases_DiseaseId",
@@ -266,24 +249,14 @@ namespace BDMS.Migrations
                 column: "OrgCode");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Organizations_AreaCode",
-                table: "Organizations",
-                column: "AreaCode");
+                name: "IX_Slots_CampId",
+                table: "Slots",
+                column: "CampId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Slots_AreaCode",
+                name: "IX_Slots_DonorId",
                 table: "Slots",
-                column: "AreaCode");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Slots_DonorCnic",
-                table: "Slots",
-                column: "DonorCnic");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Slots_OrgCode",
-                table: "Slots",
-                column: "OrgCode");
+                column: "DonorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TestedBags_BagId",
@@ -300,9 +273,6 @@ namespace BDMS.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BloodCamps");
-
-            migrationBuilder.DropTable(
                 name: "Employees");
 
             migrationBuilder.DropTable(
@@ -316,6 +286,9 @@ namespace BDMS.Migrations
 
             migrationBuilder.DropTable(
                 name: "Slots");
+
+            migrationBuilder.DropTable(
+                name: "BloodCamps");
 
             migrationBuilder.DropTable(
                 name: "Donors");

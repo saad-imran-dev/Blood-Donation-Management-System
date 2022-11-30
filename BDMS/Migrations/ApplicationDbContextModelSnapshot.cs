@@ -49,11 +49,11 @@ namespace BDMS.Migrations
 
             modelBuilder.Entity("BDMS.Models.BloodBag", b =>
                 {
-                    b.Property<int>("BagId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BagId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BloodGrp")
                         .IsRequired()
@@ -62,10 +62,7 @@ namespace BDMS.Migrations
                     b.Property<int>("History")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("BagId");
+                    b.HasKey("Id");
 
                     b.HasIndex("History");
 
@@ -144,8 +141,9 @@ namespace BDMS.Migrations
                     b.Property<int>("AreaCode")
                         .HasColumnType("int");
 
-                    b.Property<int>("Cnic")
-                        .HasColumnType("int");
+                    b.Property<string>("Cnic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -181,8 +179,9 @@ namespace BDMS.Migrations
                     b.Property<int>("AreaCode")
                         .HasColumnType("int");
 
-                    b.Property<int>("Cnic")
-                        .HasColumnType("int");
+                    b.Property<string>("Cnic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -224,9 +223,6 @@ namespace BDMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AreaCode")
-                        .HasColumnType("int");
-
                     b.Property<string>("Desc")
                         .HasColumnType("nvarchar(max)");
 
@@ -240,8 +236,6 @@ namespace BDMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AreaCode");
-
                     b.ToTable("Organizations");
                 });
 
@@ -253,7 +247,7 @@ namespace BDMS.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AreaCode")
+                    b.Property<int>("CampId")
                         .HasColumnType("int");
 
                     b.Property<string>("CanDonate")
@@ -263,10 +257,7 @@ namespace BDMS.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DonorCnic")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrgCode")
+                    b.Property<int>("DonorId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Time")
@@ -277,11 +268,9 @@ namespace BDMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AreaCode");
+                    b.HasIndex("CampId");
 
-                    b.HasIndex("DonorCnic");
-
-                    b.HasIndex("OrgCode");
+                    b.HasIndex("DonorId");
 
                     b.ToTable("Slots");
                 });
@@ -369,42 +358,23 @@ namespace BDMS.Migrations
                     b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("BDMS.Models.Organization", b =>
-                {
-                    b.HasOne("BDMS.Models.Area", "Area")
-                        .WithMany("Organizations")
-                        .HasForeignKey("AreaCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Area");
-                });
-
             modelBuilder.Entity("BDMS.Models.Slot", b =>
                 {
-                    b.HasOne("BDMS.Models.Area", "Area")
+                    b.HasOne("BDMS.Models.BloodCamp", "BloodCamp")
                         .WithMany("Slots")
-                        .HasForeignKey("AreaCode")
+                        .HasForeignKey("CampId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BDMS.Models.Donor", "Donor")
                         .WithMany("Slots")
-                        .HasForeignKey("DonorCnic")
+                        .HasForeignKey("DonorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BDMS.Models.Organization", "Organization")
-                        .WithMany("Slots")
-                        .HasForeignKey("OrgCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Area");
+                    b.Navigation("BloodCamp");
 
                     b.Navigation("Donor");
-
-                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("BDMS.Models.TestedBags", b =>
@@ -433,15 +403,16 @@ namespace BDMS.Migrations
                     b.Navigation("Donors");
 
                     b.Navigation("Employees");
-
-                    b.Navigation("Organizations");
-
-                    b.Navigation("Slots");
                 });
 
             modelBuilder.Entity("BDMS.Models.BloodBag", b =>
                 {
                     b.Navigation("TestedBags");
+                });
+
+            modelBuilder.Entity("BDMS.Models.BloodCamp", b =>
+                {
+                    b.Navigation("Slots");
                 });
 
             modelBuilder.Entity("BDMS.Models.Disease", b =>
@@ -459,8 +430,6 @@ namespace BDMS.Migrations
                     b.Navigation("BloodCamps");
 
                     b.Navigation("Employees");
-
-                    b.Navigation("Slots");
                 });
 
             modelBuilder.Entity("BDMS.Models.Slot", b =>
