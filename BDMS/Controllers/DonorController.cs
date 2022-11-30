@@ -104,6 +104,7 @@ namespace BDMS.Controllers
         public IActionResult DonateSlot(int id)
         {
             TempData["Id"] = TempData["Id"];
+            DateTime date = Convert.ToDateTime(TempData["Date"]);
 
             BloodCamp camp = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS].[dbo].[BloodCamps] WHERE Id={id}").FirstOrDefault();
 
@@ -114,7 +115,8 @@ namespace BDMS.Controllers
 
             DateTime time = camp.StartTime;
 
-            IEnumerable<Slot> SlotBooked = _db.Slots.FromSql($"SELECT * FROM [BDMS].[dbo].[Slots] WHERE CAST( {DateTime.Today.Date} AS Date )=CAST( GETDATE() AS Date ) and CampId={id}");
+            IEnumerable<Slot> SlotBooked = _db.Slots.FromSql($"SELECT * FROM [BDMS].[dbo].[Slots] WHERE CAST( Date AS Date )={date.ToString("yyyy-MM-dd")} and CampId={id}");
+
             List<Slot> SlotAvailable = new List<Slot>();
 
             while (time.TimeOfDay != camp.EndTime.TimeOfDay)
@@ -124,7 +126,7 @@ namespace BDMS.Controllers
                 if (count.Count() < camp.beds)
                 {
                     Slot obj = new Slot();
-                    obj.Date = DateTime.Today.Date;
+                    obj.Date = Convert.ToDateTime(TempData["Date"]);
                     obj.CanDonate = "No";
                     obj.CampId = id;
                     obj.bedno = count.Count() + 1;
@@ -135,7 +137,8 @@ namespace BDMS.Controllers
                 time = time.AddMinutes(30);
             }
 
-            TempData["Date"] = DateTime.Today.Date;
+            TempData["Date"] = TempData["Date"];
+            TempData["CampId"] = id;
 
             return View(SlotAvailable);
         }
@@ -163,6 +166,16 @@ namespace BDMS.Controllers
             _db.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SlotDate(DateTime date)
+        {
+            TempData["Date"] = date;
+
+            return RedirectToAction("DonateSlot", new { id = Convert.ToInt32(TempData["CampId"]) });
         }
     }
 }

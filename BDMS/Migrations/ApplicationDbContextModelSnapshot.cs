@@ -49,11 +49,11 @@ namespace BDMS.Migrations
 
             modelBuilder.Entity("BDMS.Models.BloodBag", b =>
                 {
-                    b.Property<int>("BagId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BagId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BloodGrp")
                         .IsRequired()
