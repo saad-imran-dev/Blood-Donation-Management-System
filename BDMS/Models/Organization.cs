@@ -15,12 +15,6 @@ namespace BDMS.Models
         public string? Address { get; set; }
 
         public ICollection<Employee> Employees { get; set; }
-
-        [ForeignKey("Area")]
-        public int AreaCode { get; set; }
-        public Area Area { get; set; }
-
         public ICollection<BloodCamp> BloodCamps { get; set; }
-        public ICollection<Slot> Slots { get; set; }
     }
 }

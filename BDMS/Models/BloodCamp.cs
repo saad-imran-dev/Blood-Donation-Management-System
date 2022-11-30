@@ -22,5 +22,6 @@ namespace BDMS.Models
         public DateTime EndTime { get; set; }
         public int beds { get; set; }
 
+        public ICollection<Slot> Slots { get; set; }
     }
 }

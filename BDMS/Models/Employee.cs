@@ -6,7 +6,8 @@ namespace BDMS.Models
     public class Employee
     {
         public int Id { get; set; }
-        public int Cnic { get; set; }
+        [Required]
+        public string? Cnic { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
