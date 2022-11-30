@@ -1,0 +1,101 @@
+﻿@model Organization
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container p-5 my-5 bg-dark text-white">
+    <h1 class="display-4">Name</h1>
+    <h1 class="display-6"><b>@Model.Name</b></h1>
+    <br />
+    <h1 class="display-4">Description:</h1>
+    <p>@Model.Desc</p>
+    <br />
+    <h1 class="display-4">Address</h1>
+    <p>@Model.Address</p>
+</div>
+<div>
+    <div class="col-6">
+        <h1 class="display-5" style="color:black"><b>Employees</b></h1>
+        
+    </div>
+    <div class="col-12 text-end">
+        <a class="btn btn-primary"> <i class="bi bi-plus-circle"></i> &nbsp; Add Employee</a>
+    </div>
+</div>
+
+<table class="table table-dark table-bordered">
+    <thead>
+        <tr>
+            <th style="width:50%">
+                Name
+            </th>
+            <th style="width:50%">
+                CNIC
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in @Model.Employees)
+        {
+            <tr>
+            <td style="width:50%">
+                @obj.FirstName
+            </td>
+                <td style="width:50%">
+                    @obj.Cnic
+                </td>
+        </tr>
+        }
+        
+    </tbody>
+
+</table>
+<div>
+    <div class="col-6">
+        <h1 class="display-5" style="color:black"><b>Blood Camps</b></h1>
+        
+    </div>
+    <div class="col-12 text-end">
+        <a class="btn btn-primary"> <i class="bi bi-plus-circle"></i> &nbsp; Add BloodCamps</a>
+    </div>
+</div>
+@*Uncomment when data is entered in Blood Camps*@
+@*<table class="table table-primary table-hover table-bordered">
+    <thead>
+        <tr>
+            <th style="width:25%">
+                Area
+            </th>
+            <th style="width:25%">
+                Beds
+            </th>
+            <th style="width:25%">
+                Start Time
+            </th>
+            <th style="width:25%">
+                End Time
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in @Model.BloodCamps)
+        {
+            <tr>
+                <td style="width:25%">
+                    @obj.Area
+                </td>
+                <td style="width:25%">
+                    @obj.beds
+                </td>
+                <td style="width:25%">
+                    @obj.StartTime
+                </td>
+                <td style="width:25%">
+                    @obj.EndTime
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>*@
