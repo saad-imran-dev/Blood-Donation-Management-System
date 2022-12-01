@@ -262,5 +262,37 @@ namespace BDMS.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // GET
+        public IActionResult History()
+        {
+            int id = Convert.ToInt32(TempData["Id"]);
+            var hist = _db.Slots.Where(s => s.DonorId == id && s.Date < DateTime.Now.Date)
+                .Include(b=> b.BloodCamp)
+                .Include(o=> o.BloodCamp.Organization)
+                .Include(o => o.BloodCamp.Area);
+
+            TempData["Id"] = TempData["Id"];
+
+            return View(hist);
+        }
+
+        // GET
+        public IActionResult Result(int id) 
+        {
+            BloodBag obj = _db.BloodBags.Where(s => s.History == id).Include(t => t.TestedBags).FirstOrDefault();
+
+            if(obj == null)
+            {
+                return NotFound();
+            }
+
+            foreach(var test in obj.TestedBags)
+            {
+                test.Disease = _db.Diseases.Find(test.DiseaseId);
+            }
+
+            return View(obj);
+        }
     }
 }
