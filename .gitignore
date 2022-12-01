@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/BDMS/Migrations/20221129151325_new.cs
+/BDMS/Migrations
