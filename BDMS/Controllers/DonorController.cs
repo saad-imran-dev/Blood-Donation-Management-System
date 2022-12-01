@@ -19,7 +19,17 @@ namespace BDMS.Controllers
         // GET
         public IActionResult Index(Donor obj)
         {
-            if(TempData.ContainsKey("Id"))
+            if (TempData.ContainsKey("Date"))
+            {
+                TempData.Remove("Date");
+            }
+
+            if (TempData.ContainsKey("CampId"))
+            {
+                TempData.Remove("CampId");
+            }
+
+            if (TempData.ContainsKey("Id"))
             {
                 obj = _db.Donors.Where(s => s.Id == Convert.ToInt32(TempData["Id"])).Include(s=> s.Slots).FirstOrDefault();
             }
@@ -57,6 +67,26 @@ namespace BDMS.Controllers
             }
 
             return View(obj);
+        }
+
+        public IActionResult Logout()
+        {
+            if (TempData.ContainsKey("Id"))
+            {
+                TempData.Remove("Id");
+            }
+
+            if (TempData.ContainsKey("Date"))
+            {
+                TempData.Remove("Date");
+            }
+
+            if (TempData.ContainsKey("CampId"))
+            {
+                TempData.Remove("CampId");
+            }
+
+            return RedirectToAction("DonorLogin", "Login");
         }
 
         // GET
@@ -106,6 +136,16 @@ namespace BDMS.Controllers
         public IActionResult DonateOrg()
         {
             TempData["Id"] = TempData["Id"];
+
+            if (TempData.ContainsKey("Date"))
+            {
+                TempData.Remove("Date");
+            }
+
+            if (TempData.ContainsKey("CampId"))
+            {
+                TempData.Remove("CampId");
+            }
 
             //IEnumerable<BloodCamp> camps = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS].[dbo].[BloodCamps]");
             //var camps = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS].[dbo].[BloodCamps] b JOIN [BDMS].[dbo].[Areas] a on b.AreaCode=a.Id JOIN [BDMS].[dbo].[Organizations] o on b.OrgCode=o.Id");
@@ -184,6 +224,16 @@ namespace BDMS.Controllers
 
             _db.Slots.Add(obj);
             _db.SaveChanges();
+
+            if (TempData.ContainsKey("Date"))
+            {
+                TempData.Remove("Date");
+            }
+
+            if (TempData.ContainsKey("CampId"))
+            {
+                TempData.Remove("CampId");
+            }
 
             return RedirectToAction("Index");
         }
