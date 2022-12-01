@@ -3,6 +3,7 @@ using BDMS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 using Newtonsoft.Json.Linq;
 
 namespace BDMS.Controllers
@@ -212,6 +213,12 @@ namespace BDMS.Controllers
             {
                 return NotFound();
             }
+            if (_db.Slots.Where(s => s.Date.Date >= DateTime.Now.Date && s.DonorId == Convert.ToInt32(TempData["Id"])).Count() > 0)
+            {
+                TempData["booked"] = "You have already booked an appointment";
+                TempData["Date"] = date;
+                return RedirectToAction("DonateSlot", new { id = Campid });
+            }
 
             Slot obj = new Slot();
             obj.Date = date;
@@ -243,7 +250,14 @@ namespace BDMS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SlotDate(DateTime date)
         {
-            TempData["Date"] = date;
+            if(date < DateTime.Now)
+            {
+                TempData["Date"] = DateTime.Now.Date;
+            }
+            else
+            {
+                TempData["Date"] = date;
+            }
 
             return RedirectToAction("DonateSlot", new { id = Convert.ToInt32(TempData["CampId"]) });
         }
