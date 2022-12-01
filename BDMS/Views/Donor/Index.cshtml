@@ -47,5 +47,42 @@
         <div>Province</div>
         <div class="form-control mb-3">@Model.Area.Province</div>
     </div>
+
+    @if(Model.Slots.Count() > 0){
+        <div>
+            <div>Appointment</div>
+            <div class="form-control mb-3">@Model.Slots.First().Date.ToString("dd-MM-yyyy")  @Model.Slots.First().Time.TimeOfDay</div>
+        </div>
+
+        <div>
+            <div>Blood Camp</div>
+            <div class="form-control mb-3">@Model.Slots.First().BloodCamp.Organization.Name, @Model.Slots.First().BloodCamp.Area.Name, @Model.Slots.First().BloodCamp.Area.City, @Model.Slots.First().BloodCamp.Area.Province</div>
+        </div>
+
+        <div class="m-2">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Cancel Appointment
+                </button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to Cancel the appointment.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    <a class="btn btn-danger" asp-controller="Donor" asp-action="DeleteSlot" asp-route-id="@Model.Slots.First().Id">Cancel</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    }
 </form>
 

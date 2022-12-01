@@ -21,7 +21,11 @@ namespace BDMS.Controllers
         {
             if(TempData.ContainsKey("Id"))
             {
-                obj = _db.Donors.Where(s => s.Id == Convert.ToInt32(TempData["Id"])).FirstOrDefault(); ;
+                obj = _db.Donors.Where(s => s.Id == Convert.ToInt32(TempData["Id"])).Include(s=> s.Slots).FirstOrDefault();
+            }
+            else
+            {
+                obj = _db.Donors.Where(s => s.Id == obj.Id).Include(s => s.Slots).FirstOrDefault();
             }
 
             if (obj == null)
@@ -30,6 +34,22 @@ namespace BDMS.Controllers
             }
 
             obj.Area = _db.Areas.Where(s => obj.AreaCode == s.Id).FirstOrDefault();
+
+            if(obj.Slots.Where(s => s.Date.Date >= DateTime.Now.Date) != null)
+            {
+                obj.Slots = obj.Slots.Where(s => s.Date.Date >= DateTime.Now.Date).ToList();
+
+                foreach (Slot s in obj.Slots)
+                {
+                    s.BloodCamp = _db.BloodCamps.Find(s.CampId);
+                    s.BloodCamp.Organization = _db.Organizations.Find(s.BloodCamp.OrgCode);
+                    s.BloodCamp.Area = _db.Areas.Find(s.BloodCamp.AreaCode);
+                }
+            }
+            else
+            {
+                obj.Slots.Clear();
+            }
 
             if (obj.Area == null)
             {
@@ -176,6 +196,21 @@ namespace BDMS.Controllers
             TempData["Date"] = date;
 
             return RedirectToAction("DonateSlot", new { id = Convert.ToInt32(TempData["CampId"]) });
+        }
+
+        // GET
+        public IActionResult DeleteSlot(int id)
+        {
+            Slot obj = _db.Slots.Find(id);
+            if(obj == null)
+            {
+                return NotFound();
+            }
+
+            _db.Slots.Remove(obj);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }
