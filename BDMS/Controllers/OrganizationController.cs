@@ -55,7 +55,17 @@ namespace BDMS.Controllers
             return RedirectToAction("Login");
             //return View(obj);
         }
+        public IActionResult Addemployee()
+        {
+            return View();
+        }
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]  
+       public IActionResult Addemployee(Employee obj)
+        {
 
+        }
         //GET
         public IActionResult Organizationregister()
         {
