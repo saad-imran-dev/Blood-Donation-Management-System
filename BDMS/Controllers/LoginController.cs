@@ -33,6 +33,11 @@ namespace BDMS.Controllers
                 TempData.Remove("CampId");
             }
 
+            if (TempData.ContainsKey("successDonor"))
+            {
+                TempData.Remove("successDonor");
+            }
+
             return View();
         }
 
@@ -81,6 +86,11 @@ namespace BDMS.Controllers
                 TempData.Remove("CampId");
             }
 
+            if (TempData.ContainsKey("successDonor"))
+            {
+                TempData.Remove("successDonor");
+            }
+
             return View();
         }
 
@@ -113,7 +123,44 @@ namespace BDMS.Controllers
             _db.Donors.Add(obj);
             _db.SaveChanges();
             return RedirectToAction("DonorLogin");
-           
+        }
+
+        // GET
+        public IActionResult EmpLogin()
+        {
+            if (TempData.ContainsKey("Id"))
+            {
+                TempData.Remove("Id");
+            }
+
+            return View();
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EmpLogin(Employee obj)
+        {
+            var FromDb = _db.Employees.FromSql($"SELECT * FROM [BDMS].[dbo].[Employees] WHERE Email={obj.Email}").FirstOrDefault();
+
+            if (FromDb == null)
+            {
+                ModelState.AddModelError("Email", "Wrong Email !!");
+            }
+
+            else if (FromDb.Password != obj.Password)
+            {
+                ModelState.AddModelError("Password", "Wrong Password !!");
+            }
+
+            else
+            {
+                //_session.SetString("Id", JsonConvert.SerializeObject(FromDb.Id));
+                TempData["successEmp"] = "Donor";
+                return RedirectToAction("Index", "Emp", FromDb);
+            }
+
+            return View(obj);
         }
     }
 }
