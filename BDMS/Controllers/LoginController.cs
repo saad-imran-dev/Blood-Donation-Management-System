@@ -17,6 +17,21 @@ namespace BDMS.Controllers
         // GET
         public IActionResult DonorLogin()
         {
+            if (TempData.ContainsKey("Id"))
+            {
+                TempData.Remove("Id");
+            }
+
+            if (TempData.ContainsKey("Date"))
+            {
+                TempData.Remove("Date");
+            }
+
+            if (TempData.ContainsKey("CampId"))
+            {
+                TempData.Remove("CampId");
+            }
+
             return View();
         }
 
@@ -48,6 +63,21 @@ namespace BDMS.Controllers
         // GET
         public IActionResult DonorRegister()
         {
+            if (TempData.ContainsKey("Id"))
+            {
+                TempData.Remove("Id");
+            }
+
+            if (TempData.ContainsKey("Date"))
+            {
+                TempData.Remove("Date");
+            }
+
+            if (TempData.ContainsKey("CampId"))
+            {
+                TempData.Remove("CampId");
+            }
+
             return View();
         }
 

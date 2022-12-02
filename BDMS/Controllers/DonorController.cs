@@ -3,6 +3,7 @@ using BDMS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 using Newtonsoft.Json.Linq;
 
 namespace BDMS.Controllers
@@ -19,9 +20,23 @@ namespace BDMS.Controllers
         // GET
         public IActionResult Index(Donor obj)
         {
-            if(TempData.ContainsKey("Id"))
+            if (TempData.ContainsKey("Date"))
             {
-                obj = _db.Donors.Where(s => s.Id == Convert.ToInt32(TempData["Id"])).FirstOrDefault(); ;
+                TempData.Remove("Date");
+            }
+
+            if (TempData.ContainsKey("CampId"))
+            {
+                TempData.Remove("CampId");
+            }
+
+            if (TempData.ContainsKey("Id"))
+            {
+                obj = _db.Donors.Where(s => s.Id == Convert.ToInt32(TempData["Id"])).Include(s=> s.Slots).FirstOrDefault();
+            }
+            else
+            {
+                obj = _db.Donors.Where(s => s.Id == obj.Id).Include(s => s.Slots).FirstOrDefault();
             }
 
             if (obj == null)
@@ -31,12 +46,48 @@ namespace BDMS.Controllers
 
             obj.Area = _db.Areas.Where(s => obj.AreaCode == s.Id).FirstOrDefault();
 
+            if(obj.Slots.Where(s => s.Date.Date >= DateTime.Now.Date) != null)
+            {
+                obj.Slots = obj.Slots.Where(s => s.Date.Date >= DateTime.Now.Date).ToList();
+
+                foreach (Slot s in obj.Slots)
+                {
+                    s.BloodCamp = _db.BloodCamps.Find(s.CampId);
+                    s.BloodCamp.Organization = _db.Organizations.Find(s.BloodCamp.OrgCode);
+                    s.BloodCamp.Area = _db.Areas.Find(s.BloodCamp.AreaCode);
+                }
+            }
+            else
+            {
+                obj.Slots.Clear();
+            }
+
             if (obj.Area == null)
             {
                 return NotFound();
             }
 
             return View(obj);
+        }
+
+        public IActionResult Logout()
+        {
+            if (TempData.ContainsKey("Id"))
+            {
+                TempData.Remove("Id");
+            }
+
+            if (TempData.ContainsKey("Date"))
+            {
+                TempData.Remove("Date");
+            }
+
+            if (TempData.ContainsKey("CampId"))
+            {
+                TempData.Remove("CampId");
+            }
+
+            return RedirectToAction("DonorLogin", "Login");
         }
 
         // GET
@@ -87,6 +138,16 @@ namespace BDMS.Controllers
         {
             TempData["Id"] = TempData["Id"];
 
+            if (TempData.ContainsKey("Date"))
+            {
+                TempData.Remove("Date");
+            }
+
+            if (TempData.ContainsKey("CampId"))
+            {
+                TempData.Remove("CampId");
+            }
+
             //IEnumerable<BloodCamp> camps = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS].[dbo].[BloodCamps]");
             //var camps = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS].[dbo].[BloodCamps] b JOIN [BDMS].[dbo].[Areas] a on b.AreaCode=a.Id JOIN [BDMS].[dbo].[Organizations] o on b.OrgCode=o.Id");
             var camps = _db.BloodCamps.Include(b => b.Area).Include(b => b.Organization);
@@ -104,6 +165,7 @@ namespace BDMS.Controllers
         public IActionResult DonateSlot(int id)
         {
             TempData["Id"] = TempData["Id"];
+            DateTime date = Convert.ToDateTime(TempData["Date"]);
 
             BloodCamp camp = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS].[dbo].[BloodCamps] WHERE Id={id}").FirstOrDefault();
 
@@ -114,7 +176,8 @@ namespace BDMS.Controllers
 
             DateTime time = camp.StartTime;
 
-            IEnumerable<Slot> SlotBooked = _db.Slots.FromSql($"SELECT * FROM [BDMS].[dbo].[Slots] WHERE CAST( {DateTime.Today.Date} AS Date )=CAST( GETDATE() AS Date ) and CampId={id}");
+            IEnumerable<Slot> SlotBooked = _db.Slots.FromSql($"SELECT * FROM [BDMS].[dbo].[Slots] WHERE CAST( Date AS Date )={date.ToString("yyyy-MM-dd")} and CampId={id}");
+
             List<Slot> SlotAvailable = new List<Slot>();
 
             while (time.TimeOfDay != camp.EndTime.TimeOfDay)
@@ -124,7 +187,7 @@ namespace BDMS.Controllers
                 if (count.Count() < camp.beds)
                 {
                     Slot obj = new Slot();
-                    obj.Date = DateTime.Today.Date;
+                    obj.Date = Convert.ToDateTime(TempData["Date"]);
                     obj.CanDonate = "No";
                     obj.CampId = id;
                     obj.bedno = count.Count() + 1;
@@ -135,7 +198,8 @@ namespace BDMS.Controllers
                 time = time.AddMinutes(30);
             }
 
-            TempData["Date"] = DateTime.Today.Date;
+            TempData["Date"] = TempData["Date"];
+            TempData["CampId"] = id;
 
             return View(SlotAvailable);
         }
@@ -148,6 +212,12 @@ namespace BDMS.Controllers
             if(date==null || Campid==0 || bed==0 || time == null || !TempData.ContainsKey("Id"))
             {
                 return NotFound();
+            }
+            if (_db.Slots.Where(s => s.Date.Date >= DateTime.Now.Date && s.DonorId == Convert.ToInt32(TempData["Id"])).Count() > 0)
+            {
+                TempData["booked"] = "You have already booked an appointment";
+                TempData["Date"] = date;
+                return RedirectToAction("DonateSlot", new { id = Campid });
             }
 
             Slot obj = new Slot();
@@ -162,7 +232,81 @@ namespace BDMS.Controllers
             _db.Slots.Add(obj);
             _db.SaveChanges();
 
+            if (TempData.ContainsKey("Date"))
+            {
+                TempData.Remove("Date");
+            }
+
+            if (TempData.ContainsKey("CampId"))
+            {
+                TempData.Remove("CampId");
+            }
+
             return RedirectToAction("Index");
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SlotDate(DateTime date)
+        {
+            if(date < DateTime.Now)
+            {
+                TempData["Date"] = DateTime.Now.Date;
+            }
+            else
+            {
+                TempData["Date"] = date;
+            }
+
+            return RedirectToAction("DonateSlot", new { id = Convert.ToInt32(TempData["CampId"]) });
+        }
+
+        // GET
+        public IActionResult DeleteSlot(int id)
+        {
+            Slot obj = _db.Slots.Find(id);
+            if(obj == null)
+            {
+                return NotFound();
+            }
+
+            _db.Slots.Remove(obj);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        // GET
+        public IActionResult History()
+        {
+            int id = Convert.ToInt32(TempData["Id"]);
+            var hist = _db.Slots.Where(s => s.DonorId == id && s.Date < DateTime.Now.Date)
+                .Include(b=> b.BloodCamp)
+                .Include(o=> o.BloodCamp.Organization)
+                .Include(o => o.BloodCamp.Area);
+
+            TempData["Id"] = TempData["Id"];
+
+            return View(hist);
+        }
+
+        // GET
+        public IActionResult Result(int id) 
+        {
+            BloodBag obj = _db.BloodBags.Where(s => s.History == id).Include(t => t.TestedBags).FirstOrDefault();
+
+            if(obj == null)
+            {
+                return NotFound();
+            }
+
+            foreach(var test in obj.TestedBags)
+            {
+                test.Disease = _db.Diseases.Find(test.DiseaseId);
+            }
+
+            return View(obj);
         }
     }
 }
