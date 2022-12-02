@@ -2,6 +2,7 @@
 using BDMS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace BDMS.Controllers
 {
@@ -54,6 +55,8 @@ namespace BDMS.Controllers
 
             else
             {
+                //_session.SetString("Id", JsonConvert.SerializeObject(FromDb.Id));
+                TempData["successDonor"] = "Donor";
                 return RedirectToAction("Index", "Donor", FromDb);
             }
 
