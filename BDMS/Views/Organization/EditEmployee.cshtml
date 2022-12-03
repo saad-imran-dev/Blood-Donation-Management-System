@@ -1,14 +1,20 @@
 ﻿@model Employee
 
-<form method="post" asp-action="Addemployee">
+<form method="post" asp-action="EditEmployee">
     <input asp-for="@Model.OrgCode" hidden />
+    <input asp-for="@Model.FirstName" hidden />
+    <input asp-for="@Model.LastName" hidden />
+    <input asp-for="@Model.Cnic" hidden />
+    <input asp-for="@Model.Email" hidden />
+    <input asp-for="@Model.Password" hidden />
+    @*<input as-for="@Model.Password" hidden />*@
     @*<input asp-for="@Model.Id" hidden />*@
     <div class="p-4 mt-3">
         <div class="row pb-2">
-            <h2 class="text-primary bg-dark">Add Employee</h2>
+            <h2 class="text-white bg-dark">Edit Employee</h2>
         </div>
     </div>
-    <div class="mb-3">
+    @*<div class="mb-3">
         <label asp-for="@Model.FirstName"></label>
         <input asp-for="@Model.FirstName" class="form-control" />
         <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
@@ -17,22 +23,22 @@
         <label asp-for="@Model.LastName"></label>
         <input asp-for="@Model.LastName" class="form-control" />
         <span asp-validation-for="@Model.LastName" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
+    </div>*@
+@*    <div class="mb-3">
         <label asp-for="@Model.Cnic"></label>
         <input asp-for="@Model.Cnic" class="form-control" />
         <span asp-validation-for="@Model.Cnic" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
+    </div>*@
+@*    <div class="mb-3">
         <label asp-for="@Model.Email"></label>
         <input asp-for="@Model.Email" class="form-control" />
         <span asp-validation-for="@Model.Email" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="@Model.Password"></label>
-        <input type="password" asp-for="@Model.Password" class="form-control" />
+        <input type="password" asp-for="@Model.Password" disabled class="form-control" />
         <span asp-validation-for="@Model.Password" class="text-danger"></span>
-    </div>
+    </div>*@
     <div class="mb-3">
         <label asp-for="@Model.Area.Name">Name of the Area</label>
         <input asp-for="@Model.Area.Name" class="form-control" />
@@ -48,10 +54,7 @@
         <input asp-for="@Model.Area.Province" class="form-control" />
         <span asp-validation-for="@Model.Area.Province" class="text-danger"></span>
     </div>
-@*    @{
-        Model.Employees.Add(obj);
-    }*@
-    <button type="submit" class="btn btn-primary">Add Employee</button>
+    <button type="submit" class="btn btn-primary">Edit Employee</button>
 
 
 </form>

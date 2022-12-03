@@ -19,7 +19,7 @@
         
     </div>
     <div class="col-12 text-end">
-        <a class="btn btn-primary"> <i class="bi bi-plus-circle"></i> &nbsp; Add Employee</a>
+        <a class="btn btn-primary" asp-controller="Organization" asp-action="Addemployee" asp-route-id="@Model.Id"> <i class="bi bi-plus-circle"></i> &nbsp; Add Employee</a>
     </div>
 </div>
 
@@ -32,18 +32,27 @@
             <th style="width:50%">
                 CNIC
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach(var obj in @Model.Employees)
         {
             <tr>
-            <td style="width:50%">
+            <td style="width:20%">
                 @obj.FirstName
             </td>
-                <td style="width:50%">
+                <td style="width:40%">
                     @obj.Cnic
                 </td>
+            <td>
+                    <div class="w-75 btn-group" role="group">
+                        <a asp-controller="Organization" asp-action="EditEmployee" asp-route-id="@obj.Id"
+                        class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
+                        <a asp-controller="Organization" asp-action="DeleteEmployee" asp-route-id="@obj.Id"
+                        class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
+					</div>
+				</td>
         </tr>
         }
         
@@ -60,7 +69,7 @@
     </div>
 </div>
 @*Uncomment when data is entered in Blood Camps*@
-@*<table class="table table-primary table-hover table-bordered">
+<table class="table table-primary table-hover table-bordered">
     <thead>
         <tr>
             <th style="width:25%">
@@ -98,4 +107,4 @@
 
     </tbody>
 
-</table>*@
+</table>
