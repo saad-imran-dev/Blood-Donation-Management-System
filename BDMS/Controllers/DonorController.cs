@@ -56,7 +56,7 @@ namespace BDMS.Controllers
 
             if(obj.Slots.Where(s => s.Date.Date >= DateTime.Now.Date) != null)
             {
-                obj.Slots = obj.Slots.Where(s => s.Date.Date >= DateTime.Now.Date).ToList();
+                obj.Slots = obj.Slots.Where(s => s.Date.Date >= DateTime.Now.Date && s.CanDonate == "No" && s.Reject == "No").ToList();
 
                 foreach (Slot s in obj.Slots)
                 {

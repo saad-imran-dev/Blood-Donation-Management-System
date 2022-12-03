@@ -25,7 +25,12 @@ namespace BDMS.Controllers
                 return RedirectToAction("EmpLogin", "Login");
             }
 
-            if(obj.Id != 0)
+            if (TempData.ContainsKey("Slot"))
+            {
+                TempData.Remove("Slot");
+            }
+
+            if (obj.Id != 0)
             {
                 TempData["Id"] = obj.Id;
                 id = obj.Id;
@@ -53,6 +58,11 @@ namespace BDMS.Controllers
             if (TempData.ContainsKey("Id"))
             {
                 TempData.Remove("Id");
+            }
+
+            if (TempData.ContainsKey("Slot"))
+            {
+                TempData.Remove("Slot");
             }
 
             if (TempData.ContainsKey("successEmp"))
@@ -127,6 +137,16 @@ namespace BDMS.Controllers
         // GET
         public IActionResult AcceptDonor(int id)
         {
+            if (!TempData.ContainsKey("successEmp"))
+            {
+                return RedirectToAction("EmpLogin", "Login");
+            }
+
+            if (TempData.ContainsKey("Slot"))
+            {
+                TempData.Remove("Slot");
+            }
+
             Slot s = _db.Slots.Find(id);
 
             if (s == null)
@@ -153,6 +173,16 @@ namespace BDMS.Controllers
         // GET
         public IActionResult RejectDonor(int id)
         {
+            if (!TempData.ContainsKey("successEmp"))
+            {
+                return RedirectToAction("EmpLogin", "Login");
+            }
+
+            if (TempData.ContainsKey("Slot"))
+            {
+                TempData.Remove("Slot");
+            }
+
             Slot s = _db.Slots.Find(id);
 
             if (s == null)
