@@ -16,7 +16,7 @@ namespace BDMS.Controllers
 
         public IActionResult Index(Organization obj)
         {
-            var orgfromdb = _db.Organizations.Where(s => s.Name == obj.Name).Include(b => b.Employees).FirstOrDefault();
+            var orgfromdb = _db.Organizations.Where(s => s.Name == obj.Name).Include(b => b.Employees).Include(x=> x.BloodCamps).FirstOrDefault();
             return View(orgfromdb);
         }
         //GET
@@ -47,7 +47,6 @@ namespace BDMS.Controllers
             return RedirectToAction("Login");
             //return View(obj);
         }
-        //[Route("Organization/{id:int}")]
         //GET
         public IActionResult Addemployee(int id)
         {
@@ -181,6 +180,11 @@ namespace BDMS.Controllers
             _db.Organizations.Add(obj);
             _db.SaveChanges();
             return RedirectToAction("Login");
+        }
+        //GET
+        public IActionResult AddCamp(int id)
+        {
+            return NotFound();
         }
     }
 }

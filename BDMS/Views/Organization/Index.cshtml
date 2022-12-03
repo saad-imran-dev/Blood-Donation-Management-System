@@ -65,25 +65,26 @@
         
     </div>
     <div class="col-12 text-end">
-        <a class="btn btn-primary"> <i class="bi bi-plus-circle"></i> &nbsp; Add BloodCamps</a>
+        <a class="btn btn-primary" asp-controller="Organization" asp-action="AddCamp" asp-route-id="@Model.Id"> <i class="bi bi-plus-circle"></i> &nbsp; Add BloodCamps</a>
     </div>
 </div>
-@*Uncomment when data is entered in Blood Camps*@
+
 <table class="table table-primary table-hover table-bordered">
     <thead>
         <tr>
-            <th style="width:25%">
-                Area
-            </th>
-            <th style="width:25%">
-                Beds
-            </th>
             <th style="width:25%">
                 Start Time
             </th>
             <th style="width:25%">
                 End Time
             </th>
+            <th style="width:25%">
+                Beds
+            </th>
+            <th style="width:25%">
+                See Details
+            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -91,16 +92,24 @@
         {
             <tr>
                 <td style="width:25%">
-                    @obj.Area
+                    @obj.StartTime
+                </td>
+                <td style="width:25%">
+                    @obj.EndTime
                 </td>
                 <td style="width:25%">
                     @obj.beds
                 </td>
                 <td style="width:25%">
-                    @obj.StartTime
+                    <a class="btn btn-secondary" asp-controller="Organization" asp-action="CampDetails" asp-route-id="@obj.AreaCode">Details</a>
                 </td>
-                <td style="width:25%">
-                    @obj.EndTime
+                <td>
+                        <div class="w-75 btn-group" role="group">
+                        <a asp-controller="Organization" asp-action="EditCamp" asp-route-id="@obj.Id"
+                        class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
+                        <a asp-controller="Organization" asp-action="DeleteCamp" asp-route-id="@obj.Id"
+                        class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
+					</div>
                 </td>
             </tr>
         }
