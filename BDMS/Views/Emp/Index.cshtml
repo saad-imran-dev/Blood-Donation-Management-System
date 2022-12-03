@@ -23,9 +23,9 @@
               <div class="card mb-4" style="width: 100%;">
               <div class="card-body">
                 <p class="card-text text-decoration-none">
-                        Name: @Html.DisplayFor(modelItem => item.Donor.FirstName) @Html.DisplayFor(modelItem => item.Donor.LastName)<br>
+                        @*Name: @Html.DisplayFor(modelItem => item.Donor.FirstName) @Html.DisplayFor(modelItem => item.Donor.LastName)<br>*@
                         Cnic: @Html.DisplayFor(modelItem => item.Donor.Cnic)<br>
-                        Time: @Html.DisplayFor(modelItem => item.Time.TimeOfDay)<br>
+                        Time: @Html.DisplayFor(modelItem => item.Time.TimeOfDay) - @Html.DisplayFor(modelItem => item.Time.AddMinutes(30).TimeOfDay)<br>
 
                         <a class="btn btn-info my-3" style="width:150 px;" asp-controller="Emp" asp-action="CheckUp" asp-route-id="@item.Id">
                                Check Up

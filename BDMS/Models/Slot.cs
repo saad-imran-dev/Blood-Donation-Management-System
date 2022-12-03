@@ -13,6 +13,8 @@ namespace BDMS.Models
         public int bedno { get; set; }
         [Required]
         public String CanDonate { get; set; }
+        [Required]
+        public String Reject { get; set; }
 
         [ForeignKey("BloodCamp")]
         public int CampId { get; set; }
