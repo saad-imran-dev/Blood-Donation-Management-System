@@ -184,7 +184,138 @@ namespace BDMS.Controllers
         //GET
         public IActionResult AddCamp(int id)
         {
-            return NotFound();
+            var camp = new BloodCamp();
+            camp.OrgCode = id;
+            return View(camp);
+        }
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddCamp(int OrgCode, DateTime StartTime,DateTime EndTime,int beds,Area area)
+        {
+            if(area==null)
+            {
+                return NotFound();
+            }
+            var areafromdb = _db.Areas.Where(x => x.Name == area.Name && x.City == area.City && x.Province == area.Province).FirstOrDefault();
+            if(areafromdb == null)
+            {
+                return NotFound(); 
+            }
+            var Camp = new BloodCamp();
+            Camp.OrgCode = OrgCode;
+            Camp.StartTime = StartTime;
+            Camp.EndTime = EndTime;
+            Camp.beds = beds;
+            Camp.AreaCode = areafromdb.Id;
+            _db.BloodCamps.Add(Camp);
+            _db.SaveChanges();
+            var org = _db.Organizations.Find(OrgCode);
+            if(org == null) {
+                return NotFound();
+            }
+            return RedirectToAction("Index", org);
+        }
+        //GET
+        public IActionResult EditCamp(int id)
+        {
+            var camp = _db.BloodCamps.Find(id);
+            if(camp==null)
+            {
+                return NotFound();
+            }
+            return View(camp);
+        }
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditCamp(BloodCamp bloodcamp)
+        {
+            if (bloodcamp == null)
+            {
+                return NotFound();
+            }
+            if (bloodcamp.beds < 0)
+            {
+                return NotFound();
+            }
+            if(bloodcamp.EndTime < bloodcamp.StartTime)
+            {
+                return NotFound();
+            }
+            var areafromdb = _db.Areas.Where(x => x.Name == bloodcamp.Area.Name && x.City == bloodcamp.Area.City && x.Province == bloodcamp.Area.Province).FirstOrDefault();
+            if(areafromdb==null)
+            {
+                return NotFound();
+            }
+            bloodcamp.AreaCode = areafromdb.Id;
+            var org = _db.Organizations.Find(bloodcamp.OrgCode);
+            if(org==null)
+            {
+                return NotFound();
+            }
+            _db.BloodCamps.Update(bloodcamp);
+            _db.SaveChanges();
+            return RedirectToAction("Index", org);
+        }
+        //GET
+        public IActionResult DeleteCamp(int id)
+        {
+            var Camp = _db.BloodCamps.Find(id);
+            if(Camp==null)
+            {
+                return NotFound();
+            }
+            return View(Camp);
+        }
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteCamp(int OrgCode,int id)
+        {
+            var camp = _db.BloodCamps.Find(id);
+            var org = _db.Organizations.Find(OrgCode);
+            if(camp==null)
+            {
+                return RedirectToAction("Index", OrgCode);
+            }
+            _db.BloodCamps.Remove(camp);
+            _db.SaveChanges();
+            return RedirectToAction("Index", org);
+        }
+        public IActionResult seeDetails(int id)
+        {
+            var camp = _db.BloodCamps.Where(x=> x.Id == id).Include(b=> b.Slots).FirstOrDefault();
+            if (camp == null)
+            {
+                return NotFound();
+            }
+            foreach (var slots in camp.Slots)
+            {
+                var blcamp = _db.BloodCamps.Find(slots.CampId);
+                if(blcamp!=null)
+                {
+                    slots.BloodCamp = blcamp;
+                }
+                
+                var donor = _db.Donors.Find(slots.DonorId);
+                if(donor!=null)
+                {
+                    slots.Donor = donor;
+                }
+                
+            }
+            return View(camp);
+            
+        }
+        public IActionResult viewOrg(int id)
+        {
+            if(id==0)
+            {
+                return NotFound();
+            }
+            var org = _db.Organizations.Find(id);
+            return RedirectToAction("Index", org);
         }
     }
 }
