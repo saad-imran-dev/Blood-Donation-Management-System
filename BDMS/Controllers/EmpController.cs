@@ -32,8 +32,8 @@ namespace BDMS.Controllers
 
             if (obj.Id != 0)
             {
-                TempData["Id"] = obj.Id;
-                id = obj.Id;
+                TempData["Id"] = _db.BloodCamps.Where(x => x.OrgCode == obj.OrgCode && x.AreaCode == obj.AreaCode).First().Id; ;
+                id = _db.BloodCamps.Where(x => x.OrgCode == obj.OrgCode && x.AreaCode == obj.AreaCode).First().Id; ;
             }
 
             else if (TempData.ContainsKey("Id"))
@@ -46,7 +46,8 @@ namespace BDMS.Controllers
                 return NotFound();
             }
 
-            var Slots = _db.Slots.Where(x => x.DonorId == id && x.Date.Date == DateTime.Now.Date && x.CanDonate == "No" && x.Reject == "No").Include(d=> d.Donor);
+            id = Convert.ToInt32(TempData["Id"]);
+            var Slots = _db.Slots.Where(x => x.CampId == id && x.Date.Date == DateTime.Now.Date && x.CanDonate == "No" && x.Reject == "No").Include(d=> d.Donor);
             
 
             return View(Slots);
@@ -91,6 +92,7 @@ namespace BDMS.Controllers
                 return NotFound();
             }
 
+
             s.Donor.Slots = _db.Slots.Where(x => x.Date.Date < DateTime.Now.Date && x.DonorId == s.DonorId && x.CanDonate == "Yes").ToList();
             s.Donor.Slots.OrderByDescending(x => x.Date.Date);
 
@@ -116,7 +118,7 @@ namespace BDMS.Controllers
             }
 
             s.Slots = _db.Slots.Where(x => x.Date.Date < DateTime.Now.Date && x.DonorId == s.Id && x.CanDonate == "Yes").Include(b=> b.BloodBags).ToList();
-            s.Slots.OrderByDescending(x => x.Date.Date);
+            s.Slots.OrderBy(x => x.Date.Date);
 
             List<BloodBag> bags = new List<BloodBag>();
 
@@ -197,6 +199,93 @@ namespace BDMS.Controllers
             Employee obj = _db.Employees.Find(Convert.ToInt32(TempData["Id"]));
 
             return RedirectToAction("Index", obj);
+        }
+
+        // GET
+        public IActionResult Reports()
+        {
+            if (!TempData.ContainsKey("successEmp"))
+            {
+                return RedirectToAction("EmpLogin", "Login");
+            }
+
+            if (TempData.ContainsKey("Slot"))
+            {
+                TempData.Remove("Slot");
+            }
+
+            int id = Convert.ToInt32(TempData["Id"]);
+            var Slots = _db.Slots.Where(x => x.CampId == id && x.CanDonate == "Yes" && x.Reject == "No").Include(d => d.BloodBags);
+
+            List<BloodBag> bags = new List<BloodBag>();
+
+            foreach (var item in Slots)
+            {
+                BloodBag b = item.BloodBags.First();
+
+                if (_db.TestedBags.Where(x => x.BagId == b.Id).Count() == 0)
+                {
+                    b.Slot = _db.Slots.Find(b.History);
+                    bags.Add(b);
+                }
+            }
+
+            return View(bags);
+        }
+
+        // GET
+        public IActionResult AddReport(int id)
+        {
+            if (!TempData.ContainsKey("successEmp"))
+            {
+                return RedirectToAction("EmpLogin", "Login");
+            }
+
+            if (TempData.ContainsKey("Slot"))
+            {
+                TempData.Remove("Slot");
+            }
+
+            BloodBag bag = _db.BloodBags.Find(id);
+
+            if(bag == null)
+            {
+                return NotFound();
+            }
+
+            return View(bag);
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddReport(int Id, String BloodGrp, int[] Diseases)
+        {
+            if (!TempData.ContainsKey("successEmp"))
+            {
+                return RedirectToAction("EmpLogin", "Login");
+            }
+
+            if (TempData.ContainsKey("Slot"))
+            {
+                TempData.Remove("Slot");
+            }
+
+            BloodBag bag = _db.BloodBags.Find(Id);
+            bag.BloodGrp = BloodGrp;
+            _db.BloodBags.Update(bag);
+            _db.SaveChanges();
+
+            for(int i=0; i<Diseases.Count(); i++)
+            {
+                TestedBags tb = new TestedBags();
+                tb.BagId = bag.Id;
+                tb.DiseaseId = Diseases[i];
+                _db.TestedBags.Add(tb);
+            }
+            _db.SaveChanges();
+
+            return RedirectToAction("Reports");
         }
     }
 }
