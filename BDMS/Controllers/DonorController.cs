@@ -324,7 +324,7 @@ namespace BDMS.Controllers
             }
 
             int id = Convert.ToInt32(TempData["Id"]);
-            var hist = _db.Slots.Where(s => s.DonorId == id && s.Date < DateTime.Now.Date)
+            var hist = _db.Slots.Where(s => s.DonorId == id && s.CanDonate == "Yes")
                 .Include(b=> b.BloodCamp)
                 .Include(o=> o.BloodCamp.Organization)
                 .Include(o => o.BloodCamp.Area);
