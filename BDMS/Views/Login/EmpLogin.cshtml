@@ -1,4 +1,4 @@
-﻿@model Donor
+﻿@model Employee
 @{
     ViewData["Title"] = "login";
 }
@@ -16,13 +16,10 @@
             <input type="password" class="form-control" id="exampleInputPassword1" asp-for="Password">
             <span asp-validation-for="Password" class="text-danger"></span>
           </div>    
-          @*<div class="mb-3 form-check">
+            @*<div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="exampleCheck1">
             <label class="form-check-label" for="exampleCheck1">Check me out</label>
           </div>*@
-          <div class="text-center">
-              <p>Not a member? <a asp-controller="Login" asp-action="DonorRegister">Register</a></p>
-          </div>
           <button type="submit" class="btn btn-primary">login</button>
     </div>
   </form>

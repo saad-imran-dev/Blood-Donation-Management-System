@@ -1,9 +1,11 @@
 ﻿using BDMS.Data;
 using BDMS.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace BDMS.Controllers
@@ -20,6 +22,12 @@ namespace BDMS.Controllers
         // GET
         public IActionResult Index(Donor obj)
         {
+            //int id = JsonConvert.DeserializeObject<int>(_session.GetString("Id"));
+            if (!TempData.ContainsKey("successDonor"))
+            {
+                return RedirectToAction("DonorLogin", "Login");
+            }
+
             if (TempData.ContainsKey("Date"))
             {
                 TempData.Remove("Date");
@@ -48,7 +56,7 @@ namespace BDMS.Controllers
 
             if(obj.Slots.Where(s => s.Date.Date >= DateTime.Now.Date) != null)
             {
-                obj.Slots = obj.Slots.Where(s => s.Date.Date >= DateTime.Now.Date).ToList();
+                obj.Slots = obj.Slots.Where(s => s.Date.Date >= DateTime.Now.Date && s.CanDonate == "No" && s.Reject == "No").ToList();
 
                 foreach (Slot s in obj.Slots)
                 {
@@ -87,12 +95,22 @@ namespace BDMS.Controllers
                 TempData.Remove("CampId");
             }
 
+            if (TempData.ContainsKey("successDonor"))
+            {
+                TempData.Remove("successDonor");
+            }
+
             return RedirectToAction("DonorLogin", "Login");
         }
 
         // GET
         public IActionResult EditInfo(int Id)
         {
+            if (!TempData.ContainsKey("successDonor"))
+            {
+                return RedirectToAction("DonorLogin", "Login");
+            }
+
             if (Id == null)
             {
                 return NotFound();
@@ -114,6 +132,11 @@ namespace BDMS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditInfo(Donor obj)
         {
+            if (!TempData.ContainsKey("successDonor"))
+            {
+                return RedirectToAction("DonorLogin", "Login");
+            }
+
             if (obj == null)
             {
                 return NotFound();
@@ -136,6 +159,11 @@ namespace BDMS.Controllers
         // GET
         public IActionResult DonateOrg()
         {
+            if (!TempData.ContainsKey("successDonor"))
+            {
+                return RedirectToAction("DonorLogin", "Login");
+            }
+
             TempData["Id"] = TempData["Id"];
 
             if (TempData.ContainsKey("Date"))
@@ -164,6 +192,11 @@ namespace BDMS.Controllers
         // GET
         public IActionResult DonateSlot(int id)
         {
+            if (!TempData.ContainsKey("successDonor"))
+            {
+                return RedirectToAction("DonorLogin", "Login");
+            }
+
             TempData["Id"] = TempData["Id"];
             DateTime date = Convert.ToDateTime(TempData["Date"]);
 
@@ -265,6 +298,11 @@ namespace BDMS.Controllers
         // GET
         public IActionResult DeleteSlot(int id)
         {
+            if (!TempData.ContainsKey("successDonor"))
+            {
+                return RedirectToAction("DonorLogin", "Login");
+            }
+
             Slot obj = _db.Slots.Find(id);
             if(obj == null)
             {
@@ -280,8 +318,13 @@ namespace BDMS.Controllers
         // GET
         public IActionResult History()
         {
+            if (!TempData.ContainsKey("successDonor"))
+            {
+                return RedirectToAction("DonorLogin", "Login");
+            }
+
             int id = Convert.ToInt32(TempData["Id"]);
-            var hist = _db.Slots.Where(s => s.DonorId == id && s.Date < DateTime.Now.Date)
+            var hist = _db.Slots.Where(s => s.DonorId == id && s.CanDonate == "Yes")
                 .Include(b=> b.BloodCamp)
                 .Include(o=> o.BloodCamp.Organization)
                 .Include(o => o.BloodCamp.Area);
@@ -294,6 +337,11 @@ namespace BDMS.Controllers
         // GET
         public IActionResult Result(int id) 
         {
+            if (!TempData.ContainsKey("successDonor"))
+            {
+                return RedirectToAction("DonorLogin", "Login");
+            }
+
             BloodBag obj = _db.BloodBags.Where(s => s.History == id).Include(t => t.TestedBags).FirstOrDefault();
 
             if(obj == null)
