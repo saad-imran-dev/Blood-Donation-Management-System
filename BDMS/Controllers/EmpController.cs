@@ -30,15 +30,15 @@ namespace BDMS.Controllers
                 TempData.Remove("Slot");
             }
 
-            if (obj.Id != 0)
+            if (TempData.ContainsKey("Id"))
+            {
+                id = Convert.ToInt32(TempData["Id"]);
+            }
+
+            else if (obj.Id != 0)
             {
                 TempData["Id"] = _db.BloodCamps.Where(x => x.OrgCode == obj.OrgCode && x.AreaCode == obj.AreaCode).First().Id; ;
                 id = _db.BloodCamps.Where(x => x.OrgCode == obj.OrgCode && x.AreaCode == obj.AreaCode).First().Id; ;
-            }
-
-            else if (TempData.ContainsKey("Id"))
-            {
-                id = Convert.ToInt32(TempData["Id"]);
             }
 
             else
@@ -117,7 +117,7 @@ namespace BDMS.Controllers
                 return NotFound();
             }
 
-            s.Slots = _db.Slots.Where(x => x.Date.Date < DateTime.Now.Date && x.DonorId == s.Id && x.CanDonate == "Yes").Include(b=> b.BloodBags).ToList();
+            s.Slots = _db.Slots.Where(x => x.Date.Date <= DateTime.Now.Date && x.DonorId == s.Id && x.CanDonate == "Yes").Include(b=> b.BloodBags).ToList();
             s.Slots.OrderBy(x => x.Date.Date);
 
             List<BloodBag> bags = new List<BloodBag>();

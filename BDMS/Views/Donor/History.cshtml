@@ -32,7 +32,7 @@
                         Area: @Html.DisplayFor(modelItem => item.BloodCamp.Area.Name)<br>
                         City: @Html.DisplayFor(modelItem => item.BloodCamp.Area.City)<br>
                         Province: @Html.DisplayFor(modelItem => item.BloodCamp.Area.Province)<br>
-                        Appointmnet: @item.Date.ToString("dd-MM-yyyy") @item.Time.TimeOfDay<br>
+                        Appointment: @item.Date.ToString("dd-MM-yyyy") @item.Time.TimeOfDay<br>
 
                         @if(@item.CanDonate == "Yes"){
                            <a class="btn btn-info my-3" style="width:150 px;" asp-controller="Donor" asp-action="Result" asp-route-id="@item.Id">
