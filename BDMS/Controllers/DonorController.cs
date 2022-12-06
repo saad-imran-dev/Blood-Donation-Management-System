@@ -222,6 +222,7 @@ namespace BDMS.Controllers
                     Slot obj = new Slot();
                     obj.Date = Convert.ToDateTime(TempData["Date"]);
                     obj.CanDonate = "No";
+                    obj.Reject = "No";
                     obj.CampId = id;
                     obj.bedno = count.Count() + 1;
                     obj.Time = Convert.ToDateTime(time.ToString());
@@ -246,7 +247,7 @@ namespace BDMS.Controllers
             {
                 return NotFound();
             }
-            if (_db.Slots.Where(s => s.Date.Date >= DateTime.Now.Date && s.DonorId == Convert.ToInt32(TempData["Id"])).Count() > 0)
+            if (_db.Slots.Where(s => s.Date.Date >= DateTime.Now.Date && s.DonorId == Convert.ToInt32(TempData["Id"]) && s.CanDonate == "No" && s.Reject == "No").Count() > 0)
             {
                 TempData["booked"] = "You have already booked an appointment";
                 TempData["Date"] = date;
@@ -256,6 +257,7 @@ namespace BDMS.Controllers
             Slot obj = new Slot();
             obj.Date = date;
             obj.CanDonate = "No";
+            obj.Reject = "No";
             obj.CampId = Campid;
             obj.bedno = bed;
             obj.Time = time;
