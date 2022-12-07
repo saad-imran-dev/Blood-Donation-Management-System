@@ -200,7 +200,7 @@ namespace BDMS.Controllers
             TempData["Id"] = TempData["Id"];
             DateTime date = Convert.ToDateTime(TempData["Date"]);
 
-            BloodCamp camp = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS].[dbo].[BloodCamps] WHERE Id={id}").FirstOrDefault();
+            BloodCamp camp = _db.BloodCamps.FromSql($"SELECT * FROM [BDMS_again].[dbo].[BloodCamps] WHERE Id={id}").FirstOrDefault();
 
             if(camp == null)
             {
@@ -209,7 +209,7 @@ namespace BDMS.Controllers
 
             DateTime time = camp.StartTime;
 
-            IEnumerable<Slot> SlotBooked = _db.Slots.FromSql($"SELECT * FROM [BDMS].[dbo].[Slots] WHERE CAST( Date AS Date )={date.ToString("yyyy-MM-dd")} and CampId={id}");
+            IEnumerable<Slot> SlotBooked = _db.Slots.FromSql($"SELECT * FROM [BDMS_again].[dbo].[Slots] WHERE CAST( Date AS Date )={date.ToString("yyyy-MM-dd")} and CampId={id}");
 
             List<Slot> SlotAvailable = new List<Slot>();
 

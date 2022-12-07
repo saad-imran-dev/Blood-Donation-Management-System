@@ -93,7 +93,7 @@ namespace BDMS.Controllers
             }
 
 
-            s.Donor.Slots = _db.Slots.Where(x => x.Date.Date < DateTime.Now.Date && x.DonorId == s.DonorId && x.CanDonate == "Yes").ToList();
+            s.Donor.Slots = _db.Slots.Where(x => x.Date.Date <= DateTime.Now.Date && x.DonorId == s.DonorId && x.CanDonate == "Yes").ToList();
             s.Donor.Slots.OrderByDescending(x => x.Date.Date);
 
             return View(s);

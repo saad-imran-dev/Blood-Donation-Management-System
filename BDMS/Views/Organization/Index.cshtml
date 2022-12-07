@@ -2,10 +2,12 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<div class="col-12 text-end">
+    <a class="btn btn-primary" asp-controller="Organization" asp-action="Login">Logout</a>
+</div> 
 <div class="container p-5 my-5 bg-dark text-white">
     <h1 class="display-4">Name</h1>
-    <h1 class="display-6"><b>@Model.Name</b></h1>
+    <h3 style="color:white"><b>@Model.Name</b></h3>
     <br />
     <h1 class="display-4">Description:</h1>
     <p>@Model.Desc</p>

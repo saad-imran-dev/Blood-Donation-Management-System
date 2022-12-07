@@ -46,7 +46,7 @@ namespace BDMS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DonorLogin(Donor obj)
         {
-            var FromDb = _db.Donors.FromSql($"SELECT * FROM [BDMS].[dbo].[Donors] WHERE Email={obj.Email}").FirstOrDefault();
+            var FromDb = _db.Donors.FromSql($"SELECT * FROM [BDMS_again].[dbo].[Donors] WHERE Email={obj.Email}").FirstOrDefault();
 
             if (FromDb == null)
             {
@@ -99,7 +99,7 @@ namespace BDMS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DonorRegister(Donor obj)
         {
-            var FromDb = _db.Donors.FromSql($"SELECT * FROM [BDMS].[dbo].[Donors] WHERE Email={obj.Email}");
+            var FromDb = _db.Donors.FromSql($"SELECT * FROM [BDMS_again].[dbo].[Donors] WHERE Email={obj.Email}");
 
             if (obj == null)
             {
@@ -141,7 +141,7 @@ namespace BDMS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EmpLogin(Employee obj)
         {
-            var FromDb = _db.Employees.FromSql($"SELECT * FROM [BDMS].[dbo].[Employees] WHERE Email={obj.Email}").FirstOrDefault();
+            var FromDb = _db.Employees.FromSql($"SELECT * FROM [BDMS_again].[dbo].[Employees] WHERE Email={obj.Email}").FirstOrDefault();
 
             if (FromDb == null)
             {

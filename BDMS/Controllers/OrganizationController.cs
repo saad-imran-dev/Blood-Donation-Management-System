@@ -26,16 +26,18 @@ namespace BDMS.Controllers
         }
 
         //POST
-        [HttpPost]
+        [HttpPost,ActionName("Login")]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(Organization obj)
+        public IActionResult LoginPOST(Organization obj)
         {
-            var orgfromdb = _db.Organizations.Where(s => s.Name == obj.Name).FirstOrDefault();
-            if (obj != null)
+            if (obj == null)
             {
-                return RedirectToAction("Index", orgfromdb);
+                return View(obj);
             }
-            else if (orgfromdb == null)
+            var orgfromdb = _db.Organizations.Where(s => s.Name == obj.Name).FirstOrDefault();
+            
+
+            if (orgfromdb == null)
             {
                 ModelState.AddModelError("Name", "The Name is wrong");
             }
@@ -43,9 +45,13 @@ namespace BDMS.Controllers
             {
                 ModelState.AddModelError("Password", "The Password is wrong");
             }
-
-            return RedirectToAction("Login");
-            //return View(obj);
+            else
+            {
+               return RedirectToAction("Index", orgfromdb);
+                
+            }
+            //return RedirectToAction("Login",obj);
+            return View(obj);
         }
         //GET
         public IActionResult Addemployee(int id)
@@ -197,7 +203,9 @@ namespace BDMS.Controllers
             {
                 return NotFound();
             }
+            
             var areafromdb = _db.Areas.Where(x => x.Name == area.Name && x.City == area.City && x.Province == area.Province).FirstOrDefault();
+
             if(areafromdb == null)
             {
                 return NotFound(); 
@@ -208,8 +216,16 @@ namespace BDMS.Controllers
             Camp.EndTime = EndTime;
             Camp.beds = beds;
             Camp.AreaCode = areafromdb.Id;
-            _db.BloodCamps.Add(Camp);
-            _db.SaveChanges();
+            if (_db.BloodCamps.Where(x => x.AreaCode == areafromdb.Id && x.OrgCode == OrgCode).Count()>0)
+            {
+                ModelState.AddModelError("exist", "A blood camp in area already exist");
+            }
+            else
+            {
+                _db.BloodCamps.Add(Camp);
+                _db.SaveChanges();
+            }
+
             var org = _db.Organizations.Find(OrgCode);
             if(org == null) {
                 return NotFound();
@@ -293,8 +309,15 @@ namespace BDMS.Controllers
             foreach (var slots in camp.Slots)
             {
                 var blcamp = _db.BloodCamps.Find(slots.CampId);
-                if(blcamp!=null)
-                {
+
+                if (blcamp != null)
+                {    
+                    var areaofblcamp = _db.Areas.Find(blcamp.AreaCode);
+                    if (areaofblcamp != null)
+                    {
+                        blcamp.Area = areaofblcamp;
+                    }
+                
                     slots.BloodCamp = blcamp;
                 }
                 
